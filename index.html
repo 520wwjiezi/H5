@@ -1,0 +1,3036 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>护士岗位AI面试系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #4a6cf7;
+            --secondary-color: #6c5ce7;
+            --success-color: #00b894;
+            --warning-color: #fdcb6e;
+            --danger-color: #e17055;
+            --light-color: #dfe6e9;
+            --dark-color: #2d3436;
+            --text-color: #2d3436;
+            --text-light: #636e72;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --property-card-bg: #ffffff;
+            --property-card-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --property-card-hover: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .section-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 14px 20px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: var(--shadow);
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #636e72, #b2bec3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color), #00cec9);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning-color), #e17055);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .card-content {
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+
+        .form-group {
+            margin: 20px 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .radio-item:hover {
+            background-color: rgba(74, 108, 247, 0.05);
+        }
+
+        .radio-item input[type="radio"] {
+            transform: scale(1.2);
+        }
+
+        .radio-item label {
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--light-color);
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .timer {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        .question-area {
+            background-color: rgba(74, 108, 247, 0.05);
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .answer-area {
+            margin: 20px 0;
+        }
+
+        .answer-input {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+        }
+
+        .voice-controls {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .voice-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .voice-btn.active {
+            background: linear-gradient(135deg, var(--danger-color), #ff7675);
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(225, 112, 85, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(225, 112, 85, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(225, 112, 85, 0); }
+        }
+
+        .feedback-area {
+            background-color: rgba(0, 184, 148, 0.05);
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        .feedback-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 10px;
+        }
+
+        .feedback-content {
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, rgba(74, 108, 247, 0.1), rgba(108, 92, 231, 0.1));
+            border: 2px solid rgba(74, 108, 247, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-label {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.3s ease-out;
+        }
+
+        .slide-in {
+            animation: slideIn 0.3s ease-in;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 0;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(74, 108, 247, 0.1);
+            border-left-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+
+        .nav-btn {
+            flex: 1;
+            margin: 0 5px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .header {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .btn {
+                padding: 12px 16px;
+                font-size: 0.95rem;
+            }
+
+            .timer {
+                font-size: 1.5rem;
+            }
+
+            .question-text {
+                font-size: 1rem;
+            }
+        }
+
+        .voice-status {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .voice-status.listening {
+            background-color: rgba(0, 184, 148, 0.1);
+            color: var(--success-color);
+        }
+
+        .voice-status.ready {
+            background-color: rgba(74, 108, 247, 0.1);
+            color: var(--primary-color);
+        }
+
+        .voice-status.error {
+            background-color: rgba(225, 112, 85, 0.1);
+            color: var(--danger-color);
+        }
+
+        .tip {
+            background-color: rgba(253, 203, 110, 0.1);
+            border-left: 4px solid var(--warning-color);
+            padding: 12px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 0 10px;
+        }
+
+        .step-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--light-color);
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background-color: var(--primary-color);
+            transform: scale(1.3);
+        }
+
+        .step-dot.completed {
+            background-color: var(--success-color);
+        }
+
+        .report-item {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: rgba(74, 108, 247, 0.05);
+            border-radius: 8px;
+        }
+
+        .report-item-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .report-item-content {
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+
+        /* 数字人面试官样式 */
+        .interviewer-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .interviewer-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            box-shadow: var(--shadow-hover);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        /* 数字人表情动画 */
+        .interviewer-avatar.smile {
+            animation: smile 0.5s ease-in-out;
+        }
+
+        .interviewer-avatar.nod {
+            animation: nod 1s ease-in-out;
+        }
+
+        .interviewer-avatar.think {
+            animation: think 1.5s ease-in-out;
+        }
+
+        @keyframes smile {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes nod {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+        }
+
+        @keyframes think {
+            0%, 100% { transform: translateY(0); }
+            25% { transform: translateY(-5px) rotate(2deg); }
+            75% { transform: translateY(-5px) rotate(-2deg); }
+        }
+
+        .interviewer-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+
+        .interviewer-title {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* 面试反馈气泡 */
+        .feedback-bubble {
+            background-color: rgba(74, 108, 247, 0.1);
+            border: 2px solid rgba(74, 108, 247, 0.2);
+            border-radius: 20px;
+            padding: 12px 18px;
+            margin: 10px auto;
+            max-width: 80%;
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            animation: fadeIn 0.5s ease-in;
+            position: relative;
+        }
+
+        .feedback-bubble::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 10px 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent rgba(74, 108, 247, 0.2) transparent;
+        }
+
+        /* 实时反馈区域 */
+        .real-time-feedback {
+            background-color: rgba(0, 184, 148, 0.05);
+            border: 2px solid rgba(0, 184, 148, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 20px 0;
+            animation: slideIn 0.3s ease-in;
+        }
+
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .feedback-score {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--success-color);
+        }
+
+        .feedback-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .feedback-tag {
+            background-color: rgba(0, 184, 148, 0.1);
+            color: var(--success-color);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* 语音合成控制 */
+        .speech-controls {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+
+        .speech-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            background-color: rgba(74, 108, 247, 0.1);
+            color: var(--primary-color);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .speech-btn:hover {
+            background-color: rgba(74, 108, 247, 0.2);
+        }
+
+        .speech-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 欢迎页面 -->
+        <div class="step active" id="step-welcome">
+            <div class="header">
+                <h1>👩‍⚕️ 护士岗位AI面试系统</h1>
+                <p>专业护理面试评估，实时AI反馈，助您提升护理技能</p>
+            </div>
+            <div class="content">
+                <div class="section-title">欢迎使用护士岗位AI面试系统</div>
+                <div class="section-subtitle">本系统专为护理专业学生和护士求职者设计，通过AI技术提供专业的护理面试评估和个性化反馈。</div>
+                
+                <div class="card">
+                    <div class="card-title">✨ 系统特色</div>
+                    <div class="card-content">
+                        <p>• 专业护理面试问题库，覆盖临床护理技能</p>
+                        <p>• 实时AI评估，提供专业护理技能反馈</p>
+                        <p>• 语音识别支持，方便口述回答</p>
+                        <p>• 个性化改进建议，针对性提升护理能力</p>
+                        <p>• 简洁直观界面，适合非技术人员使用</p>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="nextStep('step-welcome', 'step-login')"><span>开始面试</span></button>
+            </div>
+        </div>
+
+        <!-- 登录/注册页面 -->
+        <div class="step" id="step-login">
+            <div class="header">
+                <h1>👤 登录/注册</h1>
+                <p>请输入您的信息开始面试</p>
+            </div>
+            <div class="content">
+                <div class="section-title">个人信息</div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="name">姓名</label>
+                    <input type="text" id="name" class="form-input" placeholder="请输入您的姓名" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="email">邮箱</label>
+                    <input type="email" id="email" class="form-input" placeholder="请输入您的邮箱" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="position">应聘职位</label>
+                    <select id="position" class="form-input" required>
+                        <option value="">请选择应聘职位</option>
+                        <option value="普通护士">普通护士</option>
+                        <option value="护师">护师</option>
+                        <option value="主管护师">主管护师</option>
+                        <option value="副主任护师">副主任护师</option>
+                        <option value="主任护师">主任护师</option>
+                        <option value="ICU护士">ICU护士</option>
+                        <option value="手术室护士">手术室护士</option>
+                        <option value="急诊护士">急诊护士</option>
+                        <option value="儿科护士">儿科护士</option>
+                        <option value="产科护士">产科护士</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary nav-btn" onclick="prevStep('step-login', 'step-welcome')"><span>返回</span></button>
+                    <button class="btn nav-btn" onclick="nextStep('step-login', 'step-select')"><span>下一步</span></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 面试类型选择页面 -->
+        <div class="step" id="step-select">
+            <div class="header">
+                <h1>🎯 选择面试类型</h1>
+                <p>根据您的护理经验选择合适的面试场景</p>
+            </div>
+            <div class="content">
+                <div class="section-title">护理面试类型</div>
+                <div class="section-subtitle">选择适合您的护理经验水平，系统将为您生成相应的专业面试问题</div>
+                
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="new-graduate" name="interview-type" value="new-graduate" checked>
+                        <label for="new-graduate">🎓 应届毕业生</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="junior-nurse" name="interview-type" value="junior-nurse">
+                        <label for="junior-nurse">👩‍⚕️ 初级护士 (1-3年经验)</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="senior-nurse" name="interview-type" value="senior-nurse">
+                        <label for="senior-nurse">👨‍⚕️ 资深护士 (3年以上经验)</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="specialty" name="interview-type" value="specialty">
+                        <label for="specialty">🏥 专科护士</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="question-count">问题数量</label>
+                    <input type="range" id="question-count" class="form-input" min="3" max="10" value="5" step="1">
+                    <div style="text-align: center; margin: 10px 0; font-weight: 600;"><span id="question-count-value">5</span> 个问题</div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary nav-btn" onclick="prevStep('step-select', 'step-login')"><span>返回</span></button>
+                    <button class="btn nav-btn" onclick="startInterview()"><span>开始面试</span></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 面试准备页面 -->
+        <div class="step" id="step-prepare">
+            <div class="header">
+                <h1>📝 面试准备</h1>
+                <p>做好准备，开始您的护理专业面试</p>
+            </div>
+            <div class="content">
+                <div class="section-title">面试即将开始</div>
+                <div class="section-subtitle">请选择一个安静的环境，准备好回答护理专业问题。</div>
+                
+                <div class="card">
+                    <div class="card-title">📋 面试说明</div>
+                    <div class="card-content">
+                        <p>• 每个问题可以语音或文字回答</p>
+                        <p>• AI将实时评估您的护理专业能力</p>
+                        <p>• 回答后会立即收到专业反馈</p>
+                        <p>• 整个过程约10-15分钟</p>
+                    </div>
+                </div>
+                
+                <!-- 护理面试重点 -->
+                <div class="card">
+                    <div class="card-title">👩‍⚕️ 护理面试重点</div>
+                    <div class="card-content">
+                        <p>• 重点展示护理专业知识和技能</p>
+                        <p>• 结合实际案例说明护理经验</p>
+                        <p>• 强调患者沟通和团队协作能力</p>
+                        <p>• 体现职业责任感和人文关怀</p>
+                    </div>
+                </div>
+                
+                <div class="tip">
+                    💡 提示：点击"开始面试"后，系统将立即开始提问。回答时请尽量详细，便于AI进行专业评估。
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary nav-btn" onclick="prevStep('step-prepare', 'step-select')"><span>返回</span></button>
+                    <button class="btn nav-btn" onclick="startInterviewSession()"><span>开始面试</span></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 面试进行页面 -->
+        <div class="step" id="step-interview">
+            <div class="header">
+                <h1>🎤 面试进行中</h1>
+                <p>请认真回答每个问题</p>
+            </div>
+            <div class="content">
+                <!-- 数字人面试官 -->
+                <div class="interviewer-container">
+                    <div class="interviewer-avatar" id="interviewer-avatar">🤖</div>
+                    <div class="interviewer-name">AI面试官</div>
+                    <div class="interviewer-title">资深HR & 技术专家</div>
+                    <div class="feedback-bubble" id="interviewer-feedback">欢迎参加面试，请放松心情，展现真实的自己</div>
+                </div>
+                
+                <div class="step-indicator" id="step-indicator"></div>
+                
+                <div class="timer" id="timer">00:00</div>
+                
+                <!-- 实时提示区域 -->
+                <div class="tip" id="real-time-tip">💡 提示：请放松心情，自然回答问题</div>
+                
+                <div class="question-area">
+                    <div class="question-text" id="current-question">正在生成问题...</div>
+                    <div id="question-hint" style="font-size: 0.9rem; color: var(--text-light); margin-top: 10px;"></div>
+                    
+                    <!-- 语音合成控制 -->
+                    <div class="speech-controls">
+                        <button class="speech-btn" id="play-question" onclick="playQuestion()">🔊 播放问题</button>
+                        <button class="speech-btn" id="speed-control" onclick="toggleSpeechSpeed()">⏱️ 语速: 正常</button>
+                    </div>
+                </div>
+                
+                <!-- 实时反馈区域 -->
+                <div class="real-time-feedback hidden" id="real-time-feedback">
+                    <div class="feedback-header">
+                        <h4 class="feedback-title">AI实时反馈</h4>
+                        <span class="feedback-score" id="feedback-score">90</span>
+                    </div>
+                    <div class="feedback-tags" id="feedback-tags">
+                        <span class="feedback-tag">内容完整</span>
+                        <span class="feedback-tag">逻辑清晰</span>
+                        <span class="feedback-tag">表达流畅</span>
+                    </div>
+                    <div class="feedback-content" id="feedback-content">
+                        您的回答内容完整，逻辑清晰，表达流畅。建议在描述项目经验时，使用STAR法则（情境、任务、行动、结果）来结构化您的回答，这样会让面试官更容易理解您的贡献。
+                    </div>
+                </div>
+                
+                <div class="voice-status ready" id="voice-status">🎙️ 点击麦克风开始录音</div>
+                
+                <div class="voice-controls">
+                    <button class="voice-btn btn-success" id="voice-btn" onclick="toggleVoiceRecognition()">🎤 开始录音</button>
+                </div>
+                
+                <div class="answer-area">
+                    <textarea class="answer-input" id="answer-input" placeholder="您的回答..." rows="6"></textarea>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary nav-btn" onclick="prevQuestion()" id="prev-btn" disabled><span>上一题</span></button>
+                    <button class="btn nav-btn" onclick="nextQuestion()" id="next-btn"><span>下一题</span></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 面试结果页面 -->
+        <div class="step" id="step-result">
+            <div class="header">
+                <h1>🏆 面试完成</h1>
+                <p>您的面试已顺利完成</p>
+            </div>
+            <div class="content">
+                <div class="result-card">
+                    <div class="score" id="total-score">0</div>
+                    <div class="score-label">综合评分</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">📊 评分详情</div>
+                    <div class="card-content" id="score-details"></div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">💡 面试总结</div>
+                    <div class="card-content" id="interview-summary"></div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary nav-btn" onclick="prevStep('step-result', 'step-interview')"><span>返回</span></button>
+                    <button class="btn nav-btn" onclick="shareResults()"><span>分享结果</span></button>
+                    <button class="btn nav-btn" onclick="generateQRCode()"><span>生成二维码</span></button>
+                    <button class="btn nav-btn" onclick="generateReport()"><span>查看详细报告</span></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 报告生成页面 -->
+        <div class="step" id="step-report">
+            <div class="header">
+                <h1>📋 面试报告</h1>
+                <p>详细的面试分析报告</p>
+            </div>
+            <div class="content">
+                <div class="section-title">面试报告</div>
+                
+                <!-- 报告图片展示 -->
+                <div class="card" style="margin: 20px 0;">
+                    <div class="card-title">📊 AI分析报告图片</div>
+                    <div class="card-content" style="text-align: center;">
+                        <div id="report-preview-container" style="background: #f8f9fa; border: 2px dashed #dfe6e9; border-radius: 8px; padding: 20px; margin: 10px 0; min-height: 200px; display: flex; align-items: center; justify-content: center;">
+                            <div id="report-preview-content" style="color: #636e72;">
+                                <p>点击下方按钮生成报告图片预览</p>
+                                <button class="btn" onclick="previewReportImage()" style="margin-top: 10px;"><span>🔄 生成报告预览</span></button>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 15px;">
+                            <p>💡 此报告图片基于您的面试数据动态生成，包含完整的评分分析和专业建议。</p>
+                            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                                <button class="btn" onclick="previewReportImage()"><span>🔄 重新生成</span></button>
+                                <button class="btn btn-success" onclick="downloadReportImage()"><span>📥 下载高清图片</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="report-content"></div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary nav-btn" onclick="prevStep('step-report', 'step-result')"><span>返回</span></button>
+                    <button class="btn nav-btn" onclick="downloadReport()"><span>下载文本报告</span></button>
+                    <button class="btn btn-success nav-btn" onclick="restartInterview()"><span>重新面试</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 面试数据
+        let interviewData = {
+            candidate: {
+                name: '',
+                email: '',
+                position: ''
+            },
+            type: 'new-graduate',
+            questionCount: 5,
+            questions: [],
+            answers: [],
+            currentQuestionIndex: 0,
+            startTime: null,
+            endTime: null,
+            score: 0,
+            details: {
+                content: 0,
+                fluency: 0,
+                structure: 0,
+                confidence: 0
+            }
+        };
+
+        // 语音识别状态
+        let recognition = null;
+        let isRecognizing = false;
+        let transcript = '';
+        
+        // 语音合成状态
+        let speechSynthesis = window.speechSynthesis;
+        let speechSpeed = 1.0; // 1.0 正常语速，0.5 慢速，1.5 快速
+        let currentUtterance = null;
+        
+        // 数字人状态
+        let interviewerState = 'neutral';
+        let currentQuestion = '';
+        
+        // AI模型配置
+        const AI_CONFIG = {
+            base_url: 'https://api-inference.modelscope.cn/v1',
+            api_key: 'ms-35ec79ea-233a-4ccb-b20a-d1d159135d3e',
+            model: 'deepseek-ai/DeepSeek-V3.2'
+        };
+
+        // 初始化语音识别
+        function initVoiceRecognition() {
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = 'zh-CN';
+                
+                recognition.onstart = function() {
+                    isRecognizing = true;
+                    document.getElementById('voice-btn').classList.add('active');
+                    document.getElementById('voice-btn').textContent = '⏹️ 停止录音';
+                    document.getElementById('voice-status').className = 'voice-status listening';
+                    document.getElementById('voice-status').textContent = '🎙️ 正在听...';
+                };
+                
+                recognition.onresult = function(event) {
+                    let interimTranscript = '';
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        const result = event.results[i];
+                        if (result.isFinal) {
+                            transcript += result[0].transcript;
+                        } else {
+                            interimTranscript += result[0].transcript;
+                        }
+                    }
+                    document.getElementById('answer-input').value = transcript + interimTranscript;
+                };
+                
+                recognition.onerror = function(event) {
+                    console.error('语音识别错误:', event.error);
+                    document.getElementById('voice-status').className = 'voice-status error';
+                    document.getElementById('voice-status').textContent = '❌ 语音识别出错，请重试';
+                    stopVoiceRecognition();
+                };
+                
+                recognition.onend = function() {
+                    stopVoiceRecognition();
+                };
+            } else {
+                document.getElementById('voice-btn').disabled = true;
+                document.getElementById('voice-btn').textContent = '🎤 浏览器不支持语音识别';
+                document.getElementById('voice-status').className = 'voice-status error';
+                document.getElementById('voice-status').textContent = '❌ 您的浏览器不支持语音识别功能';
+            }
+        }
+
+        // 开始语音识别
+        function startVoiceRecognition() {
+            if (recognition && !isRecognizing) {
+                transcript = document.getElementById('answer-input').value;
+                recognition.start();
+            }
+        }
+
+        // 停止语音识别
+        function stopVoiceRecognition() {
+            if (recognition && isRecognizing) {
+                recognition.stop();
+                isRecognizing = false;
+                document.getElementById('voice-btn').classList.remove('active');
+                document.getElementById('voice-btn').textContent = '🎤 开始录音';
+                document.getElementById('voice-status').className = 'voice-status ready';
+                document.getElementById('voice-status').textContent = '🎙️ 点击麦克风开始录音';
+            }
+        }
+
+        // 切换语音识别状态
+        function toggleVoiceRecognition() {
+            if (isRecognizing) {
+                stopVoiceRecognition();
+            } else {
+                startVoiceRecognition();
+            }
+        }
+
+        // 播放问题语音
+        function playQuestion() {
+            const questionElement = document.getElementById('current-question');
+            const questionText = questionElement.textContent.replace(/^问题 \d+: /, '');
+            
+            if (speechSynthesis && 'SpeechSynthesisUtterance' in window) {
+                // 停止当前正在播放的语音
+                if (currentUtterance) {
+                    speechSynthesis.cancel();
+                }
+                
+                const utterance = new SpeechSynthesisUtterance(questionText);
+                utterance.lang = 'zh-CN';
+                utterance.rate = speechSpeed;
+                utterance.pitch = 1.0;
+                utterance.volume = 1.0;
+                
+                // 更新数字人表情为说话状态
+                updateInterviewerExpression('speaking');
+                
+                utterance.onstart = function() {
+                    document.getElementById('play-question').textContent = '⏸️ 暂停播放';
+                    document.getElementById('play-question').classList.add('active');
+                };
+                
+                utterance.onend = function() {
+                    document.getElementById('play-question').textContent = '🔊 播放问题';
+                    document.getElementById('play-question').classList.remove('active');
+                    // 恢复数字人表情
+                    updateInterviewerExpression('neutral');
+                    // 数字人点头表示问题结束
+                    setTimeout(() => {
+                        updateInterviewerExpression('nod');
+                    }, 500);
+                };
+                
+                utterance.onerror = function(event) {
+                    console.error('语音合成错误:', event.error);
+                    document.getElementById('play-question').textContent = '🔊 播放问题';
+                    document.getElementById('play-question').classList.remove('active');
+                    updateInterviewerExpression('neutral');
+                };
+                
+                currentUtterance = utterance;
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('您的浏览器不支持语音合成功能');
+            }
+        }
+
+        // 切换语速
+        function toggleSpeechSpeed() {
+            const speedBtn = document.getElementById('speed-control');
+            
+            if (speechSpeed === 1.0) {
+                speechSpeed = 1.5;
+                speedBtn.textContent = '⏱️ 语速: 快速';
+            } else if (speechSpeed === 1.5) {
+                speechSpeed = 0.5;
+                speedBtn.textContent = '⏱️ 语速: 慢速';
+            } else {
+                speechSpeed = 1.0;
+                speedBtn.textContent = '⏱️ 语速: 正常';
+            }
+        }
+
+        // 更新数字人表情
+        function updateInterviewerExpression(state) {
+            const avatar = document.getElementById('interviewer-avatar');
+            
+            // 移除所有表情类
+            avatar.classList.remove('smile', 'nod', 'think');
+            
+            // 根据状态添加表情类
+            switch(state) {
+                case 'smile':
+                    avatar.classList.add('smile');
+                    interviewerState = 'smile';
+                    break;
+                case 'nod':
+                    avatar.classList.add('nod');
+                    interviewerState = 'nod';
+                    break;
+                case 'think':
+                    avatar.classList.add('think');
+                    interviewerState = 'think';
+                    break;
+                case 'speaking':
+                    // 说话时轻微摇头
+                    avatar.style.animation = 'think 0.5s ease-in-out infinite';
+                    interviewerState = 'speaking';
+                    break;
+                default:
+                    avatar.style.animation = '';
+                    interviewerState = 'neutral';
+                    break;
+            }
+        }
+
+        // 更新数字人反馈
+        function updateInterviewerFeedback(feedback) {
+            const feedbackBubble = document.getElementById('interviewer-feedback');
+            feedbackBubble.textContent = feedback;
+            
+            // 显示反馈气泡动画
+            feedbackBubble.style.animation = 'fadeIn 0.5s ease-in-out';
+            setTimeout(() => {
+                feedbackBubble.style.animation = '';
+            }, 500);
+        }
+
+        // 生成护士专业面试问题
+        function generateQuestions() {
+            const questionTypes = {
+                "new-graduate": [
+                    "请介绍一下你的护理专业背景和实习经历。",
+                    "作为一名应届毕业生，你认为自己最大的优势是什么？",
+                    "请描述一次你在实习中遇到的困难情况，你是如何处理的？",
+                    "你对护理工作的理解是什么？为什么选择护理这个职业？",
+                    "在紧急情况下，你会如何保持冷静并采取正确的护理措施？",
+                    "请谈谈你对患者沟通重要性的理解。",
+                    "作为一名新护士，你如何快速适应医院的工作环境？",
+                    "请描述一次你成功帮助患者的经历。",
+                    "你对护理职业的未来发展有什么规划？",
+                    "如何处理与患者家属的沟通和矛盾？"
+                ],
+                "junior-nurse": [
+                    "请分享一次你处理复杂护理病例的经验。",
+                    "在工作中，你如何确保护理操作的准确性和安全性？",
+                    "请描述一次你与医生协作完成治疗方案的经历。",
+                    "你如何管理自己的工作时间，确保所有患者得到及时护理？",
+                    "请谈谈你对护理记录重要性的理解。",
+                    "如何处理情绪激动的患者或家属？",
+                    "请分享一次你发现并纠正护理错误的经历。",
+                    "你如何保持护理专业知识的更新？",
+                    "请描述一次你在团队中发挥重要作用的经历。",
+                    "你对护理质量改进有什么建议？"
+                ],
+                "senior-nurse": [
+                    "请分享一次你指导新护士的经验。",
+                    "作为资深护士，你如何参与科室的质量管理？",
+                    "请描述一次你处理复杂医疗纠纷的经历。",
+                    "你如何评估和提升科室的护理服务水平？",
+                    "请谈谈你对护理科研和教学的理解。",
+                    "如何处理跨科室协作中的问题？",
+                    "请分享一次你参与制定护理流程的经验。",
+                    "你如何培养年轻护士的专业能力？",
+                    "请描述一次你在紧急情况下领导团队的经历。",
+                    "你对护理职业发展的长期规划是什么？"
+                ],
+                "specialty": [
+                    "请介绍你在专科护理领域的专业特长。",
+                    "请分享一次你处理专科复杂病例的经验。",
+                    "你如何保持专科护理知识的前沿性？",
+                    "请谈谈你对专科护理质量标准的理解。",
+                    "在专科护理中，你如何与多学科团队协作？",
+                    "请描述一次你参与专科护理研究的经历。",
+                    "你如何为专科患者提供个性化护理方案？",
+                    "请分享一次你在专科护理中遇到的挑战和解决方案。",
+                    "你如何评估专科护理的效果和质量？",
+                    "请谈谈你对专科护理未来发展的看法。"
+                ]
+            };
+
+            const questions = questionTypes[interviewData.type] || questionTypes["new-graduate"];
+            const selectedQuestions = [];
+            
+            // 随机选择指定数量的问题
+            while (selectedQuestions.length < interviewData.questionCount && questions.length > 0) {
+                const randomIndex = Math.floor(Math.random() * questions.length);
+                selectedQuestions.push(questions[randomIndex]);
+                questions.splice(randomIndex, 1);
+            }
+            
+            return selectedQuestions;
+        }
+
+        // 显示当前问题
+        function displayCurrentQuestion() {
+            if (interviewData.currentQuestionIndex < interviewData.questions.length) {
+                const question = interviewData.questions[interviewData.currentQuestionIndex];
+                currentQuestion = question;
+                document.getElementById('current-question').textContent = `问题 ${interviewData.currentQuestionIndex + 1}: ${question}`;
+                document.getElementById('question-hint').textContent = `⏱️ 建议回答时间：2-3分钟`;
+                
+                // 恢复之前的回答（如果有）
+                const answer = interviewData.answers[interviewData.currentQuestionIndex] || '';
+                document.getElementById('answer-input').value = answer;
+                
+                // 更新导航按钮状态
+                updateNavButtons();
+                
+                // 更新步骤指示器
+                updateStepIndicator();
+                
+                // 隐藏之前的实时反馈
+                document.getElementById('real-time-feedback').classList.add('hidden');
+                
+                // 更新数字人状态
+                updateInterviewerExpression('think');
+                
+                // 数字人思考后说话
+                setTimeout(() => {
+                    updateInterviewerFeedback(`现在是第 ${interviewData.currentQuestionIndex + 1} 个问题，请听题：`);
+                    updateInterviewerExpression('neutral');
+                    
+                    // 自动播放问题语音
+                    setTimeout(() => {
+                        playQuestion();
+                    }, 1000);
+                }, 1000);
+                
+                // 数字人微笑鼓励
+                setTimeout(() => {
+                    updateInterviewerExpression('smile');
+                    updateInterviewerFeedback('请开始你的回答，不要紧张');
+                }, 3000);
+            } else {
+                // 面试结束
+                endInterview();
+            }
+        }
+
+        // 更新导航按钮状态
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            
+            prevBtn.disabled = interviewData.currentQuestionIndex === 0;
+            
+            if (interviewData.currentQuestionIndex === interviewData.questions.length - 1) {
+                nextBtn.textContent = '完成面试';
+            } else {
+                nextBtn.textContent = '下一题';
+            }
+        }
+
+        // 更新步骤指示器
+        function updateStepIndicator() {
+            const indicator = document.getElementById('step-indicator');
+            indicator.innerHTML = '';
+            
+            for (let i = 0; i < interviewData.questions.length; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'step-dot';
+                
+                if (i < interviewData.currentQuestionIndex) {
+                    dot.classList.add('completed');
+                } else if (i === interviewData.currentQuestionIndex) {
+                    dot.classList.add('active');
+                }
+                
+                indicator.appendChild(dot);
+            }
+        }
+
+        // 上一题
+        function prevQuestion() {
+            if (interviewData.currentQuestionIndex > 0) {
+                // 保存当前回答
+                saveCurrentAnswer();
+                interviewData.currentQuestionIndex--;
+                displayCurrentQuestion();
+            }
+        }
+
+        // 下一题
+        function nextQuestion() {
+            // 保存当前回答
+            saveCurrentAnswer();
+            
+            // 如果是最后一题，结束面试
+            if (interviewData.currentQuestionIndex >= interviewData.questions.length - 1) {
+                endInterview();
+                return;
+            }
+            
+            // 生成AI实时反馈
+            generateAIFeedback();
+            
+            // 延迟切换到下一题，让用户有时间查看反馈
+            setTimeout(() => {
+                interviewData.currentQuestionIndex++;
+                displayCurrentQuestion();
+            }, 3000);
+        }
+
+        // 保存当前回答
+        function saveCurrentAnswer() {
+            const answer = document.getElementById('answer-input').value;
+            interviewData.answers[interviewData.currentQuestionIndex] = answer;
+        }
+
+        // 生成AI实时反馈
+        function generateAIFeedback() {
+            const currentIndex = interviewData.currentQuestionIndex;
+            const question = interviewData.questions[currentIndex];
+            const answer = interviewData.answers[currentIndex] || '';
+            
+            // 简单的AI反馈算法（实际应用中可接入真实AI API）
+            const feedback = analyzeAnswer(question, answer);
+            
+            // 显示实时反馈
+            displayFeedback(feedback);
+            
+            // 更新数字人状态
+            updateInterviewerExpression('nod');
+            updateInterviewerFeedback('您的回答已收到，正在生成反馈...');
+            
+            // 延迟显示数字人对反馈的反应
+            setTimeout(() => {
+                if (feedback.score >= 85) {
+                    updateInterviewerExpression('smile');
+                    updateInterviewerFeedback('回答得很好！继续保持！');
+                } else if (feedback.score >= 70) {
+                    updateInterviewerExpression('neutral');
+                    updateInterviewerFeedback('回答不错，还有改进空间。');
+                } else {
+                    updateInterviewerExpression('think');
+                    updateInterviewerFeedback('建议再深入思考一下这个问题。');
+                }
+            }, 1000);
+        }
+
+        // 分析回答并生成护理专业反馈
+        function analyzeAnswer(question, answer) {
+            // 基础评分
+            let score = 70;
+            
+            // 根据回答长度评分（10-500字）
+            const answerLength = answer.length;
+            if (answerLength >= 10 && answerLength <= 100) {
+                score += 5;
+            } else if (answerLength > 100 && answerLength <= 300) {
+                score += 15;
+            } else if (answerLength > 300 && answerLength <= 500) {
+                score += 10;
+            }
+            
+            // 根据护理专业关键词评分
+            const keywords = getNursingKeywords(question);
+            const matchedKeywords = countMatchedKeywords(answer, keywords);
+            if (matchedKeywords > 0) {
+                score += matchedKeywords * 5;
+            }
+            
+            // 确保评分在0-100之间
+            score = Math.min(Math.max(score, 0), 100);
+            
+            // 生成护理专业反馈标签
+            const tags = [];
+            if (score >= 90) {
+                tags.push('优秀');
+                tags.push('专业性强');
+                tags.push('逻辑清晰');
+            } else if (score >= 80) {
+                tags.push('良好');
+                tags.push('表达流畅');
+                tags.push('结构合理');
+            } else if (score >= 70) {
+                tags.push('一般');
+                tags.push('需要补充');
+                tags.push('专业待加强');
+            } else {
+                tags.push('需改进');
+                tags.push('内容单薄');
+                tags.push('专业不足');
+            }
+            
+            // 生成详细护理专业反馈内容
+            let feedbackContent = '';
+            if (score >= 90) {
+                feedbackContent = '您的回答非常出色！内容完整，逻辑清晰，体现了专业的护理知识和临床思维。建议继续保持这种专业水准。';
+            } else if (score >= 80) {
+                feedbackContent = '您的回答整体不错，表达流畅，结构合理。建议可以加入更多具体的护理案例和操作细节，使回答更具专业性。';
+            } else if (score >= 70) {
+                feedbackContent = '您的回答基本符合要求，但专业内容可以更加丰富。建议多结合护理实践经验和专业知识来完善回答。';
+            } else {
+                feedbackContent = '您的回答需要进一步改进。建议加强护理专业知识的学习，结合实际案例来提升回答的专业性。';
+            }
+            
+            // 针对不同护理面试类型给出具体建议
+            if (interviewData.type === 'new-graduate') {
+                feedbackContent += '\n\n应届生建议：重点突出学习能力和实习经验，展示对护理职业的热情和理解。';
+            } else if (interviewData.type === 'junior-nurse') {
+                feedbackContent += '\n\n初级护士建议：强调实践经验和团队协作能力，展示专业成长潜力。';
+            } else if (interviewData.type === 'senior-nurse') {
+                feedbackContent += '\n\n资深护士建议：突出领导能力和专业指导经验，展示对护理质量管理的贡献。';
+            } else if (interviewData.type === 'specialty') {
+                feedbackContent += '\n\n专科护士建议：强调专科知识和技能，展示专科护理的专业深度。';
+            }
+            
+            return {
+                score: score,
+                tags: tags,
+                content: feedbackContent
+            };
+        }
+
+        // 获取护理专业关键词
+        function getNursingKeywords(question) {
+            // 护理专业关键词提取
+            const keywordMap = {
+                '护理专业': ['护理', '专业', '技能', '知识', '临床'],
+                '实习经历': ['实习', '经验', '实践', '临床', '病例'],
+                '患者沟通': ['患者', '沟通', '交流', '倾听', '关怀'],
+                '团队协作': ['团队', '协作', '合作', '配合', '医生'],
+                '紧急情况': ['紧急', '急救', '抢救', '应急', '安全'],
+                '护理操作': ['操作', '技能', '规范', '安全', '流程'],
+                '质量管理': ['质量', '管理', '改进', '评估', '标准'],
+                '专科护理': ['专科', '专业', '特殊', '病例', '技术'],
+                '职业规划': ['规划', '发展', '目标', '未来', '成长'],
+                '压力处理': ['压力', '应对', '调节', '心态', '情绪'],
+                '护理记录': ['记录', '文档', '评估', '报告', '病历'],
+                '感染控制': ['感染', '控制', '消毒', '隔离', '预防']
+            };
+            
+            // 查找匹配的关键词
+            for (const [key, keywords] of Object.entries(keywordMap)) {
+                if (question.includes(key)) {
+                    return keywords;
+                }
+            }
+            
+            // 默认护理关键词
+            return ['护理', '患者', '专业', '安全', '沟通'];
+        }
+
+        // 统计匹配的关键词数量
+        function countMatchedKeywords(answer, keywords) {
+            let count = 0;
+            for (const keyword of keywords) {
+                if (answer.includes(keyword)) {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        // 显示反馈
+        function displayFeedback(feedback) {
+            const feedbackElement = document.getElementById('real-time-feedback');
+            const currentIndex = interviewData.currentQuestionIndex;
+            
+            // 更新反馈内容
+            document.getElementById('feedback-score').textContent = feedback.score;
+            
+            // 更新反馈标签
+            const tagsElement = document.getElementById('feedback-tags');
+            tagsElement.innerHTML = '';
+            for (const tag of feedback.tags) {
+                const tagSpan = document.createElement('span');
+                tagSpan.className = 'feedback-tag';
+                tagSpan.textContent = tag;
+                tagsElement.appendChild(tagSpan);
+            }
+            
+            // 更新反馈内容
+            document.getElementById('feedback-content').textContent = feedback.content;
+            
+            // 显示反馈
+            feedbackElement.classList.remove('hidden');
+            feedbackElement.classList.add('fade-in');
+            
+            // 保存反馈到面试数据
+            if (!interviewData.feedback) {
+                interviewData.feedback = [];
+            }
+            interviewData.feedback[currentIndex] = feedback;
+        }
+
+        // 开始面试
+        function startInterviewSession() {
+            // 初始化面试数据
+            interviewData.startTime = new Date();
+            interviewData.currentQuestionIndex = 0;
+            interviewData.answers = [];
+            
+            // 显示面试页面
+            nextStep('step-prepare', 'step-interview');
+            
+            // 生成问题
+            interviewData.questions = generateQuestions();
+            
+            // 显示第一个问题
+            displayCurrentQuestion();
+            
+            // 开始计时
+            startTimer();
+        }
+
+        // 开始计时
+        function startTimer() {
+            let seconds = 0;
+            const timerElement = document.getElementById('timer');
+            const tipElement = document.getElementById('real-time-tip');
+            
+            const timer = setInterval(() => {
+                seconds++;
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+                
+                // 实时提示逻辑
+                updateRealTimeTip(seconds);
+            }, 1000);
+            
+            interviewData.timer = timer;
+        }
+
+        // 更新实时提示
+        function updateRealTimeTip(seconds) {
+            const tipElement = document.getElementById('real-time-tip');
+            const answerInput = document.getElementById('answer-input');
+            const currentAnswer = answerInput.value;
+            
+            // 根据时间和回答状态给出不同提示
+            if (seconds < 30) {
+                tipElement.textContent = '💡 提示：请放松心情，开始组织您的回答';
+            } else if (seconds < 60) {
+                tipElement.textContent = '⏱️ 提示：时间还充裕，您可以详细阐述';
+            } else if (seconds < 90) {
+                tipElement.textContent = '⏱️ 提示：时间已过一半，请确保覆盖核心要点';
+            } else if (seconds < 120) {
+                tipElement.textContent = '⏱️ 提示：时间剩余1分钟，建议开始总结';
+            } else if (seconds < 150) {
+                tipElement.textContent = '⏱️ 提示：时间剩余30秒，请简要总结您的回答';
+            } else {
+                tipElement.textContent = '⏱️ 提示：时间即将结束，请尽快完成回答';
+            }
+            
+            // 根据回答长度给出建议
+            if (currentAnswer.length < 20 && seconds > 60) {
+                tipElement.textContent += ' | 📝 建议：可以补充更多细节';
+            } else if (currentAnswer.length > 300) {
+                tipElement.textContent += ' | 📝 建议：可以适当精简内容';
+            }
+            
+            // 根据回答内容给出建议
+            if (!currentAnswer.includes('因为') && !currentAnswer.includes('所以') && !currentAnswer.includes('但是') && seconds > 45) {
+                tipElement.textContent += ' | 📝 建议：可以使用逻辑连接词增强表达';
+            }
+        }
+
+        // 结束面试
+        function endInterview() {
+            // 停止计时
+            if (interviewData.timer) {
+                clearInterval(interviewData.timer);
+            }
+            
+            // 保存结束时间
+            interviewData.endTime = new Date();
+            
+            // 生成评分
+            generateScore();
+            
+            // 显示结果页面
+            nextStep('step-interview', 'step-result');
+            
+            // 显示评分结果
+            displayResult();
+        }
+
+        // 生成评分
+        function generateScore() {
+            // 这里使用模拟评分，实际应用中可以调用AI API进行评分
+            interviewData.score = Math.floor(Math.random() * 20) + 80; // 80-100分
+            interviewData.details = {
+                content: Math.floor(Math.random() * 20) + 80,
+                fluency: Math.floor(Math.random() * 20) + 80,
+                structure: Math.floor(Math.random() * 20) + 80,
+                confidence: Math.floor(Math.random() * 20) + 80
+            };
+        }
+
+        // 显示结果
+        function displayResult() {
+            document.getElementById('total-score').textContent = interviewData.score;
+            
+            const scoreDetails = document.getElementById('score-details');
+            scoreDetails.innerHTML = `
+                <p>• 内容完整性：${interviewData.details.content}分</p>
+                <p>• 表达流畅度：${interviewData.details.fluency}分</p>
+                <p>• 结构清晰度：${interviewData.details.structure}分</p>
+                <p>• 自信程度：${interviewData.details.confidence}分</p>
+            `;
+            
+            const summary = document.getElementById('interview-summary');
+            summary.innerHTML = `
+                <p>面试类型：${interviewData.type === 'technical' ? '技术面试' : interviewData.type === 'hr' ? 'HR面试' : interviewData.type === 'behavioral' ? '行为面试' : '压力面试'}</p>
+                <p>问题数量：${interviewData.questions.length}个</p>
+                <p>面试时长：${Math.round((interviewData.endTime - interviewData.startTime) / 1000 / 60)}分钟</p>
+                <p>综合评价：${interviewData.score >= 90 ? '优秀' : interviewData.score >= 80 ? '良好' : interviewData.score >= 70 ? '一般' : '需要改进'}</p>
+            `;
+        }
+
+        // 生成报告
+        function generateReport() {
+            nextStep('step-result', 'step-report');
+            
+            const reportContent = document.getElementById('report-content');
+            let reportHTML = `
+                <div class="report-item">
+                    <div class="report-item-title">📋 面试基本信息</div>
+                    <div class="report-item-content">
+                        <p>• 姓名：${interviewData.candidate.name || '未填写'}</p>
+                        <p>• 邮箱：${interviewData.candidate.email || '未填写'}</p>
+                        <p>• 应聘职位：${interviewData.candidate.position || '未填写'}</p>
+                        <p>• 面试类型：${interviewData.type === 'technical' ? '技术面试' : interviewData.type === 'hr' ? 'HR面试' : interviewData.type === 'behavioral' ? '行为面试' : '压力面试'}</p>
+                        <p>• 面试时间：${interviewData.startTime ? interviewData.startTime.toLocaleString() : '未记录'}</p>
+                        <p>• 面试时长：${interviewData.startTime && interviewData.endTime ? Math.round((interviewData.endTime - interviewData.startTime) / 1000 / 60) + '分钟' : '未记录'}</p>
+                    </div>
+                </div>
+                
+                <div class="report-item">
+                    <div class="report-item-title">🎯 综合评分</div>
+                    <div class="report-item-content">
+                        <p style="font-size: 2rem; font-weight: bold; color: var(--primary-color);">${interviewData.score}</p>
+                        <p>内容完整性：${interviewData.details.content}分</p>
+                        <p>表达流畅度：${interviewData.details.fluency}分</p>
+                        <p>结构清晰度：${interviewData.details.structure}分</p>
+                        <p>自信程度：${interviewData.details.confidence}分</p>
+                        
+                        <div style="margin-top: 15px; padding: 10px; background-color: rgba(74, 108, 247, 0.1); border-radius: 8px;">
+                            <strong>评分说明：</strong>
+                            <p style="margin: 5px 0;">90-100分：优秀，具备出色的面试表现和专业能力</p>
+                            <p style="margin: 5px 0;">80-89分：良好，具备较强的面试能力，有小幅提升空间</p>
+                            <p style="margin: 5px 0;">70-79分：一般，基本符合要求，需要进一步提升</p>
+                            <p style="margin: 5px 0;">60-69分：及格，有明显不足，需要针对性改进</p>
+                            <p style="margin: 5px 0;">60分以下：不及格，建议重新准备面试</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="report-item">
+                    <div class="report-item-title">✨ 个人优势分析</div>
+                    <div class="report-item-content">
+                        ${generateStrengthsAnalysis()}
+                    </div>
+                </div>
+                
+                <div class="report-item">
+                    <div class="report-item-title">📝 问题与回答</div>
+                    <div class="report-item-content">
+            `;
+            
+            for (let i = 0; i < interviewData.questions.length; i++) {
+                reportHTML += `
+                    <div style="margin: 20px 0; padding: 15px; background-color: rgba(74, 108, 247, 0.05); border-radius: 8px;">
+                        <p style="margin: 0 0 10px 0;"><strong>问题 ${i + 1}：</strong>${interviewData.questions[i]}</p>
+                        <p style="margin: 0 0 10px 0;"><strong>回答：</strong>${interviewData.answers[i] || '未回答'}</p>
+                        ${interviewData.feedback && interviewData.feedback[i] ? `
+                        <div style="margin-top: 10px; padding: 10px; background-color: rgba(0, 184, 148, 0.05); border-left: 3px solid var(--success-color); border-radius: 0 8px 8px 0;">
+                            <p style="margin: 0 0 5px 0;"><strong>AI反馈：</strong>评分 ${interviewData.feedback[i].score}</p>
+                            <p style="margin: 0;">${interviewData.feedback[i].content}</p>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+            
+            reportHTML += `
+                    </div>
+                </div>
+                
+                <div class="report-item">
+                    <div class="report-item-title">🎯 职业发展建议</div>
+                    <div class="report-item-content">
+                        ${generateCareerAdvice()}
+                    </div>
+                </div>
+                
+                <div class="report-item">
+                    <div class="report-item-title">📊 行业趋势与岗位要求</div>
+                    <div class="report-item-content">
+                        ${generateIndustryTrends()}
+                    </div>
+                </div>
+                
+                <div class="report-item">
+                    <div class="report-item-title">💡 个性化改进建议</div>
+                    <div class="report-item-content">
+                        ${generateImprovementTips()}
+                    </div>
+                </div>
+                
+                <div class="report-item">
+                    <div class="report-item-title">📚 面试准备资源推荐</div>
+                    <div class="report-item-content">
+                        <p>1. 《面试通关实战》- 学习面试技巧和案例分析</p>
+                        <p>2. 行业专业书籍 - 提升专业知识深度</p>
+                        <p>3. 在线课程平台（如Coursera、Udemy）- 学习相关技能</p>
+                        <p>4. 模拟面试工具 - 多加练习，熟能生巧</p>
+                        <p>5. 行业博客和公众号 - 了解最新趋势和动态</p>
+                    </div>
+                </div>
+            `;
+            
+            reportContent.innerHTML = reportHTML;
+        }
+        
+        // 生成个人优势分析
+        function generateStrengthsAnalysis() {
+            // 基于面试表现生成优势分析
+            const strengths = [];
+            
+            if (interviewData.details.content >= 85) {
+                strengths.push('内容完整性强，能够全面回答问题');
+            }
+            if (interviewData.details.fluency >= 85) {
+                strengths.push('表达流畅，语言组织能力强');
+            }
+            if (interviewData.details.structure >= 85) {
+                strengths.push('回答结构清晰，逻辑思维能力强');
+            }
+            if (interviewData.details.confidence >= 85) {
+                strengths.push('自信心强，能够从容应对面试');
+            }
+            
+            // 添加通用优势
+            strengths.push('积极参与面试，态度认真');
+            strengths.push('具备基本的面试技巧和礼仪');
+            
+            let strengthsHTML = '';
+            strengths.forEach((strength, index) => {
+                strengthsHTML += `<p>${index + 1}. ${strength}</p>`;
+            });
+            
+            return strengthsHTML;
+        }
+        
+        // 生成职业发展建议
+        function generateCareerAdvice() {
+            const position = interviewData.candidate.position || '未知职位';
+            let advice = '';
+            
+            // 基于面试类型和职位给出建议
+            if (interviewData.type === 'technical') {
+                advice += `<p>1. 深入学习专业技术知识，尤其是面试中涉及的核心概念</p>`;
+                advice += `<p>2. 多做项目实践，积累实际开发经验</p>`;
+                advice += `<p>3. 学习新技术栈，关注行业发展趋势</p>`;
+                advice += `<p>4. 参与开源项目，提升技术影响力</p>`;
+            } else if (interviewData.type === 'hr') {
+                advice += `<p>1. 明确职业规划，了解自身优势和定位</p>`;
+                advice += `<p>2. 提升沟通能力和团队合作能力</p>`;
+                advice += `<p>3. 学习职场礼仪和人际关系处理技巧</p>`;
+                advice += `<p>4. 了解企业文化，寻找匹配度高的公司</p>`;
+            } else if (interviewData.type === 'behavioral') {
+                advice += `<p>1. 总结过往经历，提炼关键成就和经验</p>`;
+                advice += `<p>2. 学习STAR法则，提升故事讲述能力</p>`;
+                advice += `<p>3. 培养解决问题和应对挑战的能力</p>`;
+                advice += `<p>4. 提升情绪管理和压力应对能力</p>`;
+            } else {
+                advice += `<p>1. 提升抗压能力，学习情绪调节技巧</p>`;
+                advice += `<p>2. 培养快速思考和应变能力</p>`;
+                advice += `<p>3. 学习谈判技巧和自信心提升方法</p>`;
+                advice += `<p>4. 提前准备可能的压力问题，做好应对策略</p>`;
+            }
+            
+            advice += `<p>5. 建立职业人脉，参与行业活动和社群</p>`;
+            advice += `<p>6. 定期评估职业发展，调整规划和目标</p>`;
+            
+            return advice;
+        }
+        
+        // 生成行业趋势分析
+        function generateIndustryTrends() {
+            let trends = '';
+            
+            trends += `<p>1. 数字化转型加速，相关技术人才需求持续增长</p>`;
+            trends += `<p>2. 人工智能和大数据技术广泛应用，复合型人才受欢迎</p>`;
+            trends += `<p>3. 远程工作和灵活就业成为常态，适应性强的人才更具优势</p>`;
+            trends += `<p>4. 行业竞争加剧，持续学习和自我提升能力成为核心竞争力</p>`;
+            trends += `<p>5. 软技能（沟通、协作、创新）的重要性日益凸显</p>`;
+            
+            return trends;
+        }
+        
+        // 生成个性化改进建议
+        function generateImprovementTips() {
+            let tips = '';
+            
+            // 基于评分给出针对性建议
+            if (interviewData.details.content < 80) {
+                tips += `<p>1. 回答问题时注意内容完整性，确保覆盖所有关键点</p>`;
+                tips += `<p>2. 提前准备常见问题，避免回答过于简略</p>`;
+            }
+            if (interviewData.details.fluency < 80) {
+                tips += `<p>3. 多练习口语表达，提高语言流畅度</p>`;
+                tips += `<p>4. 放慢语速，清晰表达每一个观点</p>`;
+            }
+            if (interviewData.details.structure < 80) {
+                tips += `<p>5. 学习结构化思考，使用逻辑连接词组织内容</p>`;
+                tips += `<p>6. 采用总分总结构，先概括后展开再总结</p>`;
+            }
+            if (interviewData.details.confidence < 80) {
+                tips += `<p>7. 增强自信心，通过模拟面试提高应对能力</p>`;
+                tips += `<p>8. 保持良好的体态和眼神交流，展现自信形象</p>`;
+            }
+            
+            // 添加通用建议
+            tips += `<p>9. 研究目标公司和岗位，了解具体要求和企业文化</p>`;
+            tips += `<p>10. 准备好自己的问题，展现对公司的兴趣和思考</p>`;
+            
+            return tips;
+        }
+
+        // 下载报告
+        function downloadReport() {
+            // 生成报告文本
+            let reportText = `AI面试报告\n`;
+            reportText += `============================\n\n`;
+            reportText += `基本信息\n`;
+            reportText += `姓名：${interviewData.candidate.name || '未填写'}\n`;
+            reportText += `邮箱：${interviewData.candidate.email || '未填写'}\n`;
+            reportText += `应聘职位：${interviewData.candidate.position || '未填写'}\n`;
+            reportText += `面试类型：${interviewData.type === 'technical' ? '技术面试' : interviewData.type === 'hr' ? 'HR面试' : interviewData.type === 'behavioral' ? '行为面试' : '压力面试'}\n`;
+            reportText += `面试时间：${interviewData.startTime ? interviewData.startTime.toLocaleString() : '未记录'}\n`;
+            reportText += `面试时长：${interviewData.startTime && interviewData.endTime ? Math.round((interviewData.endTime - interviewData.startTime) / 1000 / 60) + '分钟' : '未记录'}\n\n`;
+            
+            reportText += `评分结果\n`;
+            reportText += `综合评分：${interviewData.score}\n`;
+            reportText += `内容完整性：${interviewData.details.content}分\n`;
+            reportText += `表达流畅度：${interviewData.details.fluency}分\n`;
+            reportText += `结构清晰度：${interviewData.details.structure}分\n`;
+            reportText += `自信程度：${interviewData.details.confidence}分\n\n`;
+            
+            reportText += `问题与回答\n`;
+            for (let i = 0; i < interviewData.questions.length; i++) {
+                reportText += `问题 ${i + 1}：${interviewData.questions[i]}\n`;
+                reportText += `回答：${interviewData.answers[i] || '未回答'}\n\n`;
+            }
+            
+            reportText += `改进建议\n`;
+            reportText += `1. 建议在回答问题时更加结构化，使用STAR法则（情境、任务、行动、结果）\n`;
+            reportText += `2. 可以适当增加一些具体的案例来支持你的观点\n`;
+            reportText += `3. 注意控制回答时间，避免过长或过短\n`;
+            reportText += `4. 保持自信的语气和积极的态度\n`;
+            reportText += `5. 提前准备常见面试问题，做到心中有数\n\n`;
+            
+            reportText += `报告生成时间：${new Date().toLocaleString()}`;
+            
+            // 创建下载链接
+            const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `AI面试报告_${interviewData.type}_${new Date().toISOString().slice(0, 10)}.txt`;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+
+        // 生成报告图片
+        async function generateReportImage() {
+            try {
+                // 创建Canvas元素
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // 设置画布尺寸（A4纸比例）
+                canvas.width = 800;
+                canvas.height = 1120;
+                
+                // 填充背景色
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // 绘制标题
+                ctx.fillStyle = '#2d3436';
+                ctx.font = 'bold 28px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('护士岗位AI面试分析报告', canvas.width / 2, 60);
+                
+                // 绘制基本信息
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'left';
+                let yPos = 120;
+                
+                // 基本信息区块
+                ctx.fillStyle = '#4a6cf7';
+                ctx.font = 'bold 18px Arial';
+                ctx.fillText('📋 基本信息', 40, yPos);
+                
+                ctx.fillStyle = '#2d3436';
+                ctx.font = '14px Arial';
+                yPos += 30;
+                
+                const basicInfo = [
+                    `姓名：${interviewData.candidate.name || '未填写'}`,
+                    `应聘职位：${interviewData.candidate.position || '未填写'}`,
+                    `面试类型：${getNursingInterviewTypeName(interviewData.type)}`,
+                    `面试时间：${interviewData.startTime ? interviewData.startTime.toLocaleString() : '未记录'}`,
+                    `面试时长：${interviewData.startTime && interviewData.endTime ? Math.round((interviewData.endTime - interviewData.startTime) / 1000 / 60) + '分钟' : '未记录'}`
+                ];
+                
+                basicInfo.forEach(info => {
+                    ctx.fillText(info, 50, yPos);
+                    yPos += 25;
+                });
+                
+                // 绘制评分区块
+                yPos += 20;
+                ctx.fillStyle = '#4a6cf7';
+                ctx.font = 'bold 18px Arial';
+                ctx.fillText('🎯 综合评分', 40, yPos);
+                
+                // 绘制评分圆环
+                yPos += 60;
+                const centerX = canvas.width / 2;
+                const radius = 50;
+                
+                // 背景圆环
+                ctx.beginPath();
+                ctx.arc(centerX, yPos, radius, 0, Math.PI * 2);
+                ctx.strokeStyle = '#dfe6e9';
+                ctx.lineWidth = 8;
+                ctx.stroke();
+                
+                // 分数圆环
+                const scoreRatio = interviewData.score / 100;
+                ctx.beginPath();
+                ctx.arc(centerX, yPos, radius, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * scoreRatio);
+                ctx.strokeStyle = getScoreColor(interviewData.score);
+                ctx.lineWidth = 8;
+                ctx.stroke();
+                
+                // 分数文字
+                ctx.fillStyle = getScoreColor(interviewData.score);
+                ctx.font = 'bold 24px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(interviewData.score.toString(), centerX, yPos + 8);
+                
+                ctx.textAlign = 'left';
+                
+                // 详细评分
+                yPos += 80;
+                const details = [
+                    `内容完整性：${interviewData.details.content}分`,
+                    `表达流畅度：${interviewData.details.fluency}分`,
+                    `结构清晰度：${interviewData.details.structure}分`,
+                    `自信程度：${interviewData.details.confidence}分`
+                ];
+                
+                details.forEach((detail, index) => {
+                    ctx.fillStyle = '#2d3436';
+                    ctx.font = '14px Arial';
+                    ctx.fillText(detail, 50, yPos + index * 25);
+                });
+                
+                // 绘制评价等级
+                yPos += 120;
+                ctx.fillStyle = '#4a6cf7';
+                ctx.font = 'bold 18px Arial';
+                ctx.fillText('✨ 综合评价', 40, yPos);
+                
+                yPos += 30;
+                ctx.fillStyle = getScoreColor(interviewData.score);
+                ctx.font = 'bold 20px Arial';
+                ctx.fillText(getScoreLevel(interviewData.score), 50, yPos);
+                
+                // 绘制个人优势
+                yPos += 40;
+                ctx.fillStyle = '#4a6cf7';
+                ctx.font = 'bold 18px Arial';
+                ctx.fillText('🏆 个人优势', 40, yPos);
+                
+                yPos += 30;
+                ctx.fillStyle = '#2d3436';
+                ctx.font = '14px Arial';
+                const strengths = generateStrengthsForImage();
+                strengths.forEach((strength, index) => {
+                    if (yPos + index * 20 < canvas.height - 100) {
+                        ctx.fillText(`• ${strength}`, 50, yPos + index * 20);
+                    }
+                });
+                
+                // 绘制改进建议
+                yPos += strengths.length * 20 + 20;
+                if (yPos < canvas.height - 100) {
+                    ctx.fillStyle = '#4a6cf7';
+                    ctx.font = 'bold 18px Arial';
+                    ctx.fillText('💡 改进建议', 40, yPos);
+                    
+                    yPos += 30;
+                    ctx.fillStyle = '#2d3436';
+                    ctx.font = '14px Arial';
+                    const suggestions = generateSuggestionsForImage();
+                    suggestions.forEach((suggestion, index) => {
+                        if (yPos + index * 20 < canvas.height - 50) {
+                            ctx.fillText(`• ${suggestion}`, 50, yPos + index * 20);
+                        }
+                    });
+                }
+                
+                // 绘制底部信息
+                ctx.fillStyle = '#636e72';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('护士岗位AI面试系统 - 专业护理面试评估', canvas.width / 2, canvas.height - 30);
+                ctx.fillText(`报告生成时间：${new Date().toLocaleString()}`, canvas.width / 2, canvas.height - 10);
+                
+                return canvas.toDataURL('image/png');
+                
+            } catch (error) {
+                console.error('生成报告图片失败:', error);
+                // 返回默认图片或错误处理
+                return null;
+            }
+        }
+        
+        // 获取评分颜色
+        function getScoreColor(score) {
+            if (score >= 90) return '#00b894';
+            if (score >= 80) return '#00cec9';
+            if (score >= 70) return '#fdcb6e';
+            return '#e17055';
+        }
+        
+        // 获取评分等级
+        function getScoreLevel(score) {
+            if (score >= 90) return '优秀 - 具备出色的护理专业能力';
+            if (score >= 80) return '良好 - 具有较强的护理专业素养';
+            if (score >= 70) return '一般 - 基本符合护理岗位要求';
+            return '需要改进 - 建议加强护理专业知识学习';
+        }
+        
+        // 生成图片用的个人优势
+        function generateStrengthsForImage() {
+            const strengths = [];
+            
+            if (interviewData.details.content >= 85) {
+                strengths.push('护理专业知识掌握扎实');
+            }
+            if (interviewData.details.fluency >= 85) {
+                strengths.push('语言表达流畅自然');
+            }
+            if (interviewData.details.structure >= 85) {
+                strengths.push('逻辑思维清晰有序');
+            }
+            if (interviewData.details.confidence >= 85) {
+                strengths.push('自信心强，应对从容');
+            }
+            
+            // 确保至少有3个优势
+            if (strengths.length < 3) {
+                strengths.push('学习态度认真积极');
+                strengths.push('具备良好的沟通能力');
+                strengths.push('职业发展潜力良好');
+            }
+            
+            return strengths.slice(0, 4); // 最多显示4个优势
+        }
+        
+        // 生成图片用的改进建议
+        function generateSuggestionsForImage() {
+            const suggestions = [];
+            
+            if (interviewData.details.content < 80) {
+                suggestions.push('加强护理专业知识深度和广度');
+            }
+            if (interviewData.details.fluency < 80) {
+                suggestions.push('提升语言表达的流畅度和条理性');
+            }
+            if (interviewData.details.structure < 80) {
+                suggestions.push('学习结构化思考，使用逻辑框架');
+            }
+            if (interviewData.details.confidence < 80) {
+                suggestions.push('增强自信心，多进行模拟练习');
+            }
+            
+            // 通用建议
+            suggestions.push('多参与护理实践，积累临床经验');
+            suggestions.push('关注护理行业动态和技术发展');
+            
+            return suggestions.slice(0, 5); // 最多显示5个建议
+        }
+
+        // 下载报告图片
+        async function downloadReportImage() {
+            try {
+                // 显示生成进度
+                const originalButton = document.querySelector('button[onclick="downloadReportImage()"]');
+                const originalText = originalButton.textContent;
+                originalButton.innerHTML = '<span>🔄 生成图片中...</span>';
+                originalButton.disabled = true;
+                
+                // 生成报告图片
+                const imageDataUrl = await generateReportImage();
+                
+                if (imageDataUrl) {
+                    // 创建下载链接
+                    const link = document.createElement('a');
+                    link.href = imageDataUrl;
+                    link.download = `护士岗位AI面试报告_${interviewData.candidate.name || '匿名'}_${new Date().toISOString().slice(0, 10)}.png`;
+                    link.click();
+                    
+                    // 恢复按钮状态
+                    originalButton.innerHTML = originalText;
+                    originalButton.disabled = false;
+                    
+                    // 显示成功提示
+                    alert('报告图片已成功生成并下载！');
+                } else {
+                    throw new Error('图片生成失败');
+                }
+                
+            } catch (error) {
+                console.error('下载报告图片失败:', error);
+                
+                // 恢复按钮状态
+                const originalButton = document.querySelector('button[onclick="downloadReportImage()"]');
+                originalButton.innerHTML = '<span>下载报告图片</span>';
+                originalButton.disabled = false;
+                
+                // 显示错误提示
+                alert('报告图片生成失败，请重试或联系技术支持');
+            }
+        }
+
+        // 分享面试结果
+        function shareResults() {
+            const shareText = `🎯 护士岗位AI面试结果
+
+👤 姓名：${interviewData.candidate.name || '未填写'}
+🏥 应聘职位：${interviewData.candidate.position || '未填写'}
+💯 综合评分：${interviewData.score}分
+⏱️ 面试时长：${interviewData.startTime && interviewData.endTime ? Math.round((interviewData.endTime - interviewData.startTime) / 1000 / 60) + '分钟' : '未记录'}
+
+✨ 详细评分：
+• 内容完整性：${interviewData.details.content}分
+• 表达流畅度：${interviewData.details.fluency}分
+• 结构清晰度：${interviewData.details.structure}分
+• 自信程度：${interviewData.details.confidence}分
+
+📊 综合评价：${interviewData.score >= 90 ? '优秀' : interviewData.score >= 80 ? '良好' : interviewData.score >= 70 ? '一般' : '需要改进'}
+
+💡 使用护士岗位AI面试系统，提升您的护理面试能力！
+
+分享时间：${new Date().toLocaleString()}`;
+
+            // 检查是否支持Web Share API
+            if (navigator.share) {
+                navigator.share({
+                    title: '护士岗位AI面试结果',
+                    text: shareText,
+                    url: window.location.href
+                }).then(() => {
+                    console.log('分享成功');
+                }).catch((error) => {
+                    console.log('分享取消或失败:', error);
+                    fallbackShare(shareText);
+                });
+            } else {
+                // 备用分享方式
+                fallbackShare(shareText);
+            }
+        }
+
+        // 备用分享方式
+        function fallbackShare(text) {
+            // 复制到剪贴板
+            navigator.clipboard.writeText(text).then(() => {
+                alert('面试结果已复制到剪贴板！\n\n您可以粘贴到微信、QQ等应用进行分享。');
+            }).catch(() => {
+                // 如果复制失败，显示文本供手动复制
+                const shareText = prompt('请复制以下内容进行分享：', text);
+                if (shareText) {
+                    alert('分享内容已准备好，请手动复制分享。');
+                }
+            });
+        }
+
+        // 生成二维码
+        function generateQRCode() {
+            const currentUrl = window.location.href;
+            
+            // 创建二维码容器
+            const qrModal = document.createElement('div');
+            qrModal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            `;
+            
+            const qrContent = document.createElement('div');
+            qrContent.style.cssText = `
+                background: white;
+                padding: 30px;
+                border-radius: 15px;
+                text-align: center;
+                max-width: 300px;
+            `;
+            
+            qrContent.innerHTML = `
+                <h3 style="margin-bottom: 20px; color: #333;">微信分享二维码</h3>
+                <div id="qrcode" style="margin: 20px auto; width: 200px; height: 200px;"></div>
+                <p style="color: #666; font-size: 14px; margin: 10px 0;">使用微信扫描二维码访问</p>
+                <p style="color: #999; font-size: 12px; margin: 5px 0;">或复制链接：${currentUrl}</p>
+                <div style="margin-top: 20px;">
+                    <button onclick="copyToClipboard('${currentUrl}')" style="
+                        background: #4a6cf7;
+                        color: white;
+                        border: none;
+                        padding: 10px 20px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        margin: 5px;
+                    ">复制链接</button>
+                    <button onclick="this.parentElement.parentElement.parentElement.remove()" style="
+                        background: #999;
+                        color: white;
+                        border: none;
+                        padding: 10px 20px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        margin: 5px;
+                    ">关闭</button>
+                </div>
+            `;
+            
+            qrModal.appendChild(qrContent);
+            document.body.appendChild(qrModal);
+            
+            // 使用在线API生成二维码
+            const qrImg = document.createElement('img');
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentUrl)}`;
+            qrImg.alt = '微信分享二维码';
+            qrImg.style.width = '200px';
+            qrImg.style.height = '200px';
+            
+            document.getElementById('qrcode').appendChild(qrImg);
+            
+            // 点击外部关闭
+            qrModal.addEventListener('click', (e) => {
+                if (e.target === qrModal) {
+                    qrModal.remove();
+                }
+            });
+        }
+
+        // 复制到剪贴板
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('链接已复制到剪贴板！');
+            }).catch(() => {
+                prompt('请手动复制链接：', text);
+            });
+        }
+
+        // 预览报告图片
+        async function previewReportImage() {
+            try {
+                const previewContainer = document.getElementById('report-preview-container');
+                const previewContent = document.getElementById('report-preview-content');
+                
+                // 显示生成状态
+                previewContent.innerHTML = '<p>🔄 正在生成报告图片...</p>';
+                
+                // 生成报告图片
+                const imageDataUrl = await generateReportImage();
+                
+                if (imageDataUrl) {
+                    // 创建图片预览
+                    previewContent.innerHTML = `
+                        <div style="text-align: center;">
+                            <img src="${imageDataUrl}" alt="AI面试分析报告" style="max-width: 100%; max-height: 300px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <p style="margin-top: 10px; color: #636e72; font-size: 14px;">报告预览生成成功！点击下载获取高清版本</p>
+                        </div>
+                    `;
+                    
+                    // 添加点击放大功能
+                    const previewImg = previewContent.querySelector('img');
+                    previewImg.style.cursor = 'zoom-in';
+                    previewImg.onclick = function() {
+                        showFullscreenImage(imageDataUrl);
+                    };
+                    
+                } else {
+                    previewContent.innerHTML = '<p style="color: #e17055;">❌ 报告图片生成失败，请重试</p>';
+                }
+                
+            } catch (error) {
+                console.error('预览报告图片失败:', error);
+                const previewContent = document.getElementById('report-preview-content');
+                previewContent.innerHTML = '<p style="color: #e17055;">❌ 生成失败：' + error.message + '</p>';
+            }
+        }
+
+        // 显示全屏图片
+        function showFullscreenImage(imageDataUrl) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.9);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+                cursor: zoom-out;
+            `;
+            
+            const img = document.createElement('img');
+            img.src = imageDataUrl;
+            img.style.cssText = `
+                max-width: 90%;
+                max-height: 90%;
+                border-radius: 8px;
+                box-shadow: 0 0 30px rgba(255,255,255,0.2);
+            `;
+            
+            // 关闭按钮
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = '✕';
+            closeBtn.style.cssText = `
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background: rgba(255,255,255,0.2);
+                border: none;
+                color: white;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                font-size: 18px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            
+            modal.appendChild(img);
+            modal.appendChild(closeBtn);
+            document.body.appendChild(modal);
+            
+            // 关闭功能
+            const closeModal = () => {
+                modal.remove();
+            };
+            
+            closeBtn.onclick = closeModal;
+            modal.onclick = (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            };
+            
+            // ESC键关闭
+            document.addEventListener('keydown', function escHandler(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                    document.removeEventListener('keydown', escHandler);
+                }
+            });
+        }
+
+        // 修改生成报告函数，自动预览图片
+        function generateReport() {
+            nextStep('step-result', 'step-report');
+            
+            // 自动生成报告内容
+            const reportContent = document.getElementById('report-content');
+            let reportHTML = `
+                <div class="report-item">
+                    <div class="report-item-title">📋 面试基本信息</div>
+                    <div class="report-item-content">
+                        <p>• 姓名：${interviewData.candidate.name || '未填写'}</p>
+                        <p>• 邮箱：${interviewData.candidate.email || '未填写'}</p>
+                        <p>• 应聘职位：${interviewData.candidate.position || '未填写'}</p>
+                        <p>• 面试类型：${getNursingInterviewTypeName(interviewData.type)}</p>
+                        <p>• 面试时间：${interviewData.startTime ? interviewData.startTime.toLocaleString() : '未记录'}</p>
+                        <p>• 面试时长：${interviewData.startTime && interviewData.endTime ? Math.round((interviewData.endTime - interviewData.startTime) / 1000 / 60) + '分钟' : '未记录'}</p>
+                    </div>
+                </div>
+                
+                <div class="report-item">
+                    <div class="report-item-title">🎯 综合评分分析</div>
+                    <div class="report-item-content">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <div style="font-size: 3rem; font-weight: bold; color: ${getScoreColor(interviewData.score)};">${interviewData.score}</div>
+                            <div style="font-size: 1.2rem; color: ${getScoreColor(interviewData.score)}; margin: 10px 0;">${getScoreLevel(interviewData.score)}</div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+                            <div style="background: rgba(0, 184, 148, 0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #00b894;">${interviewData.details.content}</div>
+                                <div style="font-size: 0.9rem; color: #636e72;">内容完整性</div>
+                            </div>
+                            <div style="background: rgba(0, 206, 201, 0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #00cec9;">${interviewData.details.fluency}</div>
+                                <div style="font-size: 0.9rem; color: #636e72;">表达流畅度</div>
+                            </div>
+                            <div style="background: rgba(253, 203, 110, 0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #fdcb6e;">${interviewData.details.structure}</div>
+                                <div style="font-size: 0.9rem; color: #636e72;">结构清晰度</div>
+                            </div>
+                            <div style="background: rgba(225, 112, 85, 0.1); padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #e17055;">${interviewData.details.confidence}</div>
+                                <div style="font-size: 0.9rem; color: #636e72;">自信程度</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="report-item">
+                    <div class="report-item-title">✨ 个人优势分析</div>
+                    <div class="report-item-content">
+                        ${generateStrengthsAnalysis()}
+                    </div>
+                </div>
+                
+                <div class="report-item">
+                    <div class="report-item-title">📝 问题与回答分析</div>
+                    <div class="report-item-content">
+            `;
+            
+            for (let i = 0; i < interviewData.questions.length; i++) {
+                const feedback = interviewData.feedback && interviewData.feedback[i];
+                const scoreColor = feedback ? getScoreColor(feedback.score) : '#636e72';
+                
+                reportHTML += `
+                    <div style="margin: 20px 0; padding: 15px; background-color: rgba(74, 108, 247, 0.05); border-radius: 8px;">
+                        <p style="margin: 0 0 10px 0;"><strong>问题 ${i + 1}：</strong>${interviewData.questions[i]}</p>
+                        <p style="margin: 0 0 10px 0;"><strong>回答：</strong>${interviewData.answers[i] || '未回答'}</p>
+                        ${feedback ? `
+                        <div style="margin-top: 10px; padding: 10px; background-color: rgba(0, 184, 148, 0.05); border-left: 3px solid ${scoreColor}; border-radius: 0 8px 8px 0;">
+                            <p style="margin: 0 0 5px 0;"><strong>AI反馈：</strong> <span style="color: ${scoreColor}; font-weight: bold;">评分 ${feedback.score}</span></p>
+                            <p style="margin: 0;">${feedback.content}</p>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+            
+            reportHTML += `
+                    </div>
+                </div>
+                
+                <div class="report-item">
+                    <div class="report-item-title">💡 个性化改进建议</div>
+                    <div class="report-item-content">
+                        ${generateImprovementTips()}
+                    </div>
+                </div>
+                
+                <div class="report-item">
+                    <div class="report-item-title">🎯 护理专业发展建议</div>
+                    <div class="report-item-content">
+                        ${generateNursingCareerAdvice()}
+                    </div>
+                </div>
+            `;
+            
+            reportContent.innerHTML = reportHTML;
+            
+            // 自动生成报告图片预览
+            setTimeout(() => {
+                previewReportImage();
+            }, 500);
+        }
+
+        // 生成护理专业发展建议
+        function generateNursingCareerAdvice() {
+            const position = interviewData.candidate.position || '护士';
+            let advice = '';
+            
+            if (interviewData.type === 'new-graduate') {
+                advice += `<p>1. 夯实护理基础理论，重点掌握常见病种的护理要点</p>`;
+                advice += `<p>2. 积极参与临床实习，积累实际操作经验</p>`;
+                advice += `<p>3. 学习护理文书规范，掌握正确的记录方法</p>`;
+                advice += `<p>4. 培养患者沟通技巧，建立良好护患关系</p>`;
+            } else if (interviewData.type === 'junior-nurse') {
+                advice += `<p>1. 提升专科护理技能，关注特定科室的专业要求</p>`;
+                advice += `<p>2. 学习团队协作技巧，提高与医生同事的配合效率</p>`;
+                advice += `<p>3. 培养应急处理能力，掌握常见急症的护理流程</p>`;
+                advice += `<p>4. 参与科室质量管理，提升护理服务水平</p>`;
+            } else if (interviewData.type === 'senior-nurse') {
+                advice += `<p>1. 发挥传帮带作用，指导年轻护士成长</p>`;
+                advice += `<p>2. 参与护理科研工作，推动护理技术创新</p>`;
+                advice += `<p>3. 学习护理管理知识，为晋升管理岗位做准备</p>`;
+                advice += `<p>4. 关注护理学科发展，保持专业知识的先进性</p>`;
+            } else if (interviewData.type === 'specialty') {
+                advice += `<p>1. 深化专科护理知识，成为该领域的专家</p>`;
+                advice += `<p>2. 学习先进的专科护理技术，提升专业竞争力</p>`;
+                advice += `<p>3. 参与专科护理标准的制定和完善工作</p>`;
+                advice += `<p>4. 培养跨学科协作能力，提供全面的专科护理服务</p>`;
+            }
+            
+            advice += `<p>5. 考取相关职业资格证书，如护士执业资格证、专科护士证等</p>`;
+            advice += `<p>6. 参加继续教育和学术交流，持续更新知识结构</p>`;
+            
+            return advice;
+        }
+
+        // 重启面试
+        function restartInterview() {
+            // 重置面试数据
+            interviewData = {
+                candidate: {
+                    name: '',
+                    email: '',
+                    position: ''
+                },
+                type: 'new-graduate',
+                questionCount: 5,
+                questions: [],
+                answers: [],
+                currentQuestionIndex: 0,
+                startTime: null,
+                endTime: null,
+                score: 0,
+                details: {
+                    content: 0,
+                    fluency: 0,
+                    structure: 0,
+                    confidence: 0
+                }
+            };
+            
+            // 重置表单
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('position').value = '';
+            document.getElementById('new-graduate').checked = true;
+            document.getElementById('question-count').value = 5;
+            document.getElementById('question-count-value').textContent = '5';
+            
+            // 返回欢迎页面
+            showStep('step-welcome');
+        }
+
+        // 下一步
+        function nextStep(currentStep, nextStep) {
+            if (currentStep === 'step-welcome' && nextStep === 'step-login') {
+                // 从欢迎页到登录页，无需额外操作
+            } else if (currentStep === 'step-login' && nextStep === 'step-select') {
+                // 保存用户信息
+                interviewData.candidate.name = document.getElementById('name').value;
+                interviewData.candidate.email = document.getElementById('email').value;
+                interviewData.candidate.position = document.getElementById('position').value;
+                
+                if (!interviewData.candidate.name || !interviewData.candidate.email || !interviewData.candidate.position) {
+                    alert('请填写完整的个人信息');
+                    return;
+                }
+            } else if (currentStep === 'step-select' && nextStep === 'step-prepare') {
+                // 保存面试类型和问题数量
+                interviewData.type = document.querySelector('input[name="interview-type"]:checked').value;
+                interviewData.questionCount = parseInt(document.getElementById('question-count').value);
+            } else if (currentStep === 'step-prepare' && nextStep === 'step-interview') {
+                // 准备开始面试，初始化语音识别
+                initVoiceRecognition();
+            }
+            
+            showStep(nextStep);
+        }
+
+        // 上一步
+        function prevStep(currentStep, prevStep) {
+            showStep(prevStep);
+        }
+
+        // 显示指定步骤
+        function showStep(stepId) {
+            // 获取当前活动步骤和目标步骤
+            const currentStep = document.querySelector('.step.active');
+            const targetStep = document.getElementById(stepId);
+            
+            if (currentStep && currentStep !== targetStep) {
+                // 添加退出动画
+                currentStep.classList.add('fade-out');
+                
+                // 等待退出动画完成后显示新步骤
+                setTimeout(() => {
+                    // 隐藏所有步骤
+                    document.querySelectorAll('.step').forEach(step => {
+                        step.classList.remove('active', 'fade-out');
+                    });
+                    
+                    // 显示新步骤，添加进入动画
+                    targetStep.classList.add('active', 'fade-in');
+                }, 300);
+            } else {
+                // 直接显示步骤（如果是第一个步骤或同一步骤）
+                document.querySelectorAll('.step').forEach(step => {
+                    step.classList.remove('active', 'fade-out');
+                });
+                targetStep.classList.add('active', 'fade-in');
+            }
+        }
+
+        // 开始面试
+        function startInterview() {
+            nextStep('step-select', 'step-prepare');
+        }
+
+        // AI模型调用函数
+        async function query_model(prompt, enable_thinking = false) {
+            try {
+                // 创建请求配置
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${AI_CONFIG.api_key}`
+                    },
+                    body: JSON.stringify({
+                        model: AI_CONFIG.model,
+                        messages: [
+                            {
+                                'role': 'system', 
+                                'content': '请用连贯的中文回答，先推理再给结论。你是一个专业的面试评估AI助手。'
+                            },
+                            {
+                                'role': 'user',
+                                'content': prompt
+                            }
+                        ],
+                        stream: false,
+                        temperature: 0.7,
+                        max_tokens: 512,
+                        extra_body: {
+                            enable_thinking: enable_thinking
+                        }
+                    })
+                };
+
+                // 显示AI思考状态
+                updateInterviewerExpression('think');
+                updateInterviewerFeedback('AI正在分析您的回答...');
+
+                const response = await fetch(AI_CONFIG.base_url + '/chat/completions', requestOptions);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // 恢复数字人状态
+                updateInterviewerExpression('neutral');
+                
+                return data.choices[0].message.content;
+            } catch (error) {
+                console.error('AI模型调用错误:', error);
+                updateInterviewerExpression('neutral');
+                updateInterviewerFeedback('AI分析暂时不可用，请继续面试');
+                return '由于技术原因，AI分析暂时不可用。请继续您的面试。';
+            }
+        }
+
+        // 增强的AI反馈生成函数
+        async function generateEnhancedAIFeedback(question, answer) {
+            if (!answer || answer.trim().length < 10) {
+                return {
+                    score: 50,
+                    tags: ['需改进', '内容单薄'],
+                    content: '您的回答过于简短，建议详细阐述您的想法。'
+                };
+            }
+
+            const prompt = `请对以下面试回答进行专业评估：
+
+问题：${question}
+
+回答：${answer}
+
+请从以下维度进行评估：
+1. 内容完整性（是否全面回答问题）
+2. 逻辑结构（是否有条理）
+3. 表达流畅度（语言是否通顺）
+4. 专业性（是否使用专业术语）
+5. 自信程度（语气是否自信）
+
+请给出：
+1. 综合评分（0-100分）
+2. 3-5个关键词标签
+3. 具体的改进建议
+4. 鼓励性反馈
+
+请用中文回答，格式如下：
+评分：XX分
+标签：标签1，标签2，标签3
+反馈：详细反馈内容`;
+
+            try {
+                const aiResponse = await query_model(prompt, false);
+                return parseAIFeedback(aiResponse, question, answer);
+            } catch (error) {
+                console.error('AI反馈生成错误:', error);
+                return analyzeAnswer(question, answer); // 回退到基础分析
+            }
+        }
+
+        // 解析AI反馈结果
+        function parseAIFeedback(aiResponse, question, answer) {
+            // 默认值
+            let score = 70;
+            let tags = ['一般', '需要改进'];
+            let content = 'AI分析完成，请参考具体建议。';
+
+            try {
+                // 解析评分
+                const scoreMatch = aiResponse.match(/评分[：:]\s*(\d+)/);
+                if (scoreMatch) {
+                    score = parseInt(scoreMatch[1]);
+                }
+
+                // 解析标签
+                const tagsMatch = aiResponse.match(/标签[：:]\s*([^\n]+)/);
+                if (tagsMatch) {
+                    tags = tagsMatch[1].split(/[，,]/).map(tag => tag.trim()).filter(tag => tag);
+                }
+
+                // 解析反馈内容
+                const feedbackMatch = aiResponse.match(/反馈[：:]\s*([\s\S]*?)(?=\n\n|$)/);
+                if (feedbackMatch) {
+                    content = feedbackMatch[1].trim();
+                } else {
+                    // 如果没有明确标记，使用整个响应作为反馈
+                    content = aiResponse;
+                }
+
+                // 确保评分在合理范围内
+                score = Math.min(Math.max(score, 0), 100);
+
+                // 如果标签为空，使用默认标签
+                if (tags.length === 0) {
+                    if (score >= 90) {
+                        tags = ['优秀', '内容完整', '逻辑清晰'];
+                    } else if (score >= 80) {
+                        tags = ['良好', '表达流畅', '结构合理'];
+                    } else if (score >= 70) {
+                        tags = ['一般', '需要补充', '逻辑待加强'];
+                    } else {
+                        tags = ['需改进', '内容单薄', '结构混乱'];
+                    }
+                }
+
+            } catch (error) {
+                console.error('解析AI反馈错误:', error);
+                // 使用基础分析作为备用
+                return analyzeAnswer(question, answer);
+            }
+
+            return {
+                score: score,
+                tags: tags,
+                content: content
+            };
+        }
+
+        // 智能问题生成函数
+        async function generateSmartQuestions(interviewType, questionCount) {
+            const prompt = `请生成${questionCount}个${getNursingInterviewTypeName(interviewType)}面试问题。要求：
+1. 问题要有层次性，从简单到复杂
+2. 涵盖护理专业知识、临床技能、患者沟通、团队协作等方面
+3. 问题要具有护理专业性和实用性
+4. 每个问题单独一行，用数字编号
+
+请用中文生成问题。`;
+
+            try {
+                const aiResponse = await query_model(prompt, false);
+                return parseGeneratedQuestions(aiResponse, questionCount);
+            } catch (error) {
+                console.error('智能问题生成错误:', error);
+                return generateNursingQuestions(); // 回退到护士预设问题
+            }
+        }
+
+        // 获取护士面试类型名称
+        function getNursingInterviewTypeName(type) {
+            const typeMap = {
+                'new-graduate': '应届护理毕业生',
+                'junior-nurse': '初级护士',
+                'senior-nurse': '资深护士',
+                'specialty': '专科护士'
+            };
+            return typeMap[type] || '护理';
+        }
+
+        // 解析生成的问题
+        function parseGeneratedQuestions(aiResponse, expectedCount) {
+            const lines = aiResponse.split('\n').filter(line => 
+                line.trim() && /^\d+[\.、]/.test(line.trim())
+            );
+            
+            if (lines.length >= expectedCount) {
+                return lines.slice(0, expectedCount).map(line => 
+                    line.replace(/^\d+[\.、]\s*/, '').trim()
+                );
+            }
+            
+            // 如果解析失败，使用护士预设问题
+            return generateNursingQuestions();
+        }
+
+        // 生成护士专业面试问题（已删除重复定义）
+
+        // 修改生成AI反馈函数，使用增强版本
+        async function generateAIFeedback() {
+            const currentIndex = interviewData.currentQuestionIndex;
+            const question = interviewData.questions[currentIndex];
+            const answer = interviewData.answers[currentIndex] || '';
+            
+            // 显示分析状态
+            updateInterviewerExpression('think');
+            updateInterviewerFeedback('AI正在深度分析您的回答...');
+            
+            // 使用增强的AI反馈
+            const feedback = await generateEnhancedAIFeedback(question, answer);
+            
+            // 显示实时反馈
+            displayFeedback(feedback);
+            
+            // 更新数字人状态
+            updateInterviewerExpression('nod');
+            
+            // 根据评分给出不同的鼓励
+            setTimeout(() => {
+                if (feedback.score >= 90) {
+                    updateInterviewerExpression('smile');
+                    updateInterviewerFeedback('太棒了！您的回答非常出色！');
+                } else if (feedback.score >= 80) {
+                    updateInterviewerExpression('neutral');
+                    updateInterviewerFeedback('回答得很好，继续加油！');
+                } else if (feedback.score >= 70) {
+                    updateInterviewerExpression('think');
+                    updateInterviewerFeedback('有进步空间，参考建议继续改进。');
+                } else {
+                    updateInterviewerExpression('neutral');
+                    updateInterviewerFeedback('别灰心，每个问题都是学习的机会。');
+                }
+            }, 1000);
+        }
+
+        // 修改开始面试函数，支持AI生成问题
+        async function startInterviewSession() {
+            // 初始化面试数据
+            interviewData.startTime = new Date();
+            interviewData.currentQuestionIndex = 0;
+            interviewData.answers = [];
+            
+            // 显示面试页面
+            nextStep('step-prepare', 'step-interview');
+            
+            // 显示生成问题状态
+            updateInterviewerExpression('think');
+            updateInterviewerFeedback('AI正在为您生成个性化面试问题...');
+            
+            try {
+                // 使用AI生成问题
+                interviewData.questions = await generateSmartQuestions(interviewData.type, interviewData.questionCount);
+                
+                // 显示第一个问题
+                displayCurrentQuestion();
+                
+                // 开始计时
+                startTimer();
+                
+            } catch (error) {
+                console.error('问题生成失败:', error);
+                // 回退到护士预设问题
+                interviewData.questions = generateNursingQuestions();
+                displayCurrentQuestion();
+                startTimer();
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化问题数量显示
+            const questionCount = document.getElementById('question-count');
+            const questionCountValue = document.getElementById('question-count-value');
+            
+            questionCount.addEventListener('input', function() {
+                questionCountValue.textContent = this.value;
+            });
+
+            // 测试AI连接（可选）
+            // testAIConnection();
+        });
+
+        // 测试AI连接函数（可选）
+        async function testAIConnection() {
+            try {
+                const testResponse = await query_model('请简单回复"连接成功"', false);
+                console.log('AI连接测试成功:', testResponse);
+            } catch (error) {
+                console.warn('AI连接测试失败，将使用本地分析模式');
+            }
+        }
+    </script>
+</body>
+</html>
